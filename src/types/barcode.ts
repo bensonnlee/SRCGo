@@ -13,8 +13,6 @@ export interface BarcodeState {
 
 export interface BarcodeDisplayProps {
   value: string;
-  width?: number;
   height?: number;
-  showValue?: boolean;
   isLoading?: boolean;
 }

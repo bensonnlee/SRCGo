@@ -9,8 +9,7 @@ import type { BarcodeDisplayProps } from '@apptypes/barcode';
 
 export function BarcodeDisplay({
   value,
-  height = 120,
-  showValue = true,
+  height = 220,
   isLoading = false,
 }: BarcodeDisplayProps) {
   // Show skeleton when loading
@@ -22,14 +21,6 @@ export function BarcodeDisplay({
         accessibilityLabel="Loading barcode"
       >
         <Skeleton width={250} height={height} borderRadius={4} />
-        {showValue && (
-          <Skeleton
-            width={150}
-            height={24}
-            borderRadius={4}
-            style={styles.skeletonText}
-          />
-        )}
       </View>
     );
   }
@@ -65,7 +56,6 @@ export function BarcodeDisplay({
           backgroundColor={colors.neutral.white}
         />
       </View>
-      {showValue && <Text style={styles.valueText}>{value}</Text>}
     </View>
   );
 }
@@ -88,15 +78,5 @@ const styles = StyleSheet.create({
   placeholderText: {
     color: colors.neutral.gray500,
     fontSize: typography.fontSize.base,
-  },
-  valueText: {
-    marginTop: spacing.sm,
-    fontSize: typography.fontSize.lg,
-    fontWeight: typography.fontWeight.medium,
-    color: colors.neutral.gray800,
-    letterSpacing: 2,
-  },
-  skeletonText: {
-    marginTop: spacing.sm,
   },
 });

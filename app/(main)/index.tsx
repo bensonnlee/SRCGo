@@ -27,25 +27,25 @@ export default function BarcodeScreen() {
   // Handle screen brightness
   useEffect(() => {
     const manageBrightness = async () => {
-      if (settings.keepScreenBright) {
-        // Store original brightness
-        const current = await Brightness.getBrightnessAsync();
-        originalBrightnessRef.current = current;
-        // Set to maximum brightness
-        await Brightness.setBrightnessAsync(1);
-      } else if (originalBrightnessRef.current !== null) {
-        // Restore original brightness
-        await Brightness.setBrightnessAsync(originalBrightnessRef.current);
-        originalBrightnessRef.current = null;
+      try {
+        if (settings.keepScreenBright) {
+          const current = await Brightness.getBrightnessAsync();
+          originalBrightnessRef.current = current;
+          await Brightness.setBrightnessAsync(1);
+        } else if (originalBrightnessRef.current !== null) {
+          await Brightness.setBrightnessAsync(originalBrightnessRef.current);
+          originalBrightnessRef.current = null;
+        }
+      } catch {
+        // Brightness API not available or permission denied
       }
     };
 
     manageBrightness();
 
     return () => {
-      // Restore brightness on unmount
       if (originalBrightnessRef.current !== null) {
-        Brightness.setBrightnessAsync(originalBrightnessRef.current);
+        Brightness.setBrightnessAsync(originalBrightnessRef.current).catch(() => {});
       }
     };
   }, [settings.keepScreenBright]);
@@ -72,22 +72,20 @@ export default function BarcodeScreen() {
         <Card style={styles.barcodeCard}>
           <BarcodeDisplay
             value={barcodeId ?? ''}
-            showValue
             isLoading={isLoading && !barcodeId}
           />
-
-          {settings.autoRefresh && (
-            <View
-              style={styles.timerContainer}
-              accessible={true}
-              accessibilityLabel={`Refreshing in ${timeUntilRefresh} seconds`}
-              accessibilityLiveRegion="polite"
-            >
-              <Text style={styles.timerLabel}>Refreshing in</Text>
-              <Text style={styles.timerValue}>{timeUntilRefresh}s</Text>
-            </View>
-          )}
         </Card>
+
+        {settings.autoRefresh && (
+          <View
+            style={styles.timerContainer}
+            accessible={true}
+            accessibilityLabel={`Refreshing in ${timeUntilRefresh} seconds`}
+            accessibilityLiveRegion="polite"
+          >
+            <Text style={styles.timerLabel}>Refreshing in {timeUntilRefresh}s</Text>
+          </View>
+        )}
 
         {error && (
           <Text
@@ -106,10 +104,6 @@ export default function BarcodeScreen() {
           isLoading={isLoading}
           style={styles.refreshButton}
         />
-
-        <Text style={styles.hint}>
-          Hold your phone up to the scanner with the barcode visible
-        </Text>
       </View>
     </SafeAreaView>
   );
@@ -130,19 +124,12 @@ const styles = StyleSheet.create({
     padding: spacing.xl,
   },
   timerContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: spacing.lg,
+    marginTop: spacing.sm,
   },
   timerLabel: {
-    fontSize: typography.fontSize.base,
+    fontSize: typography.fontSize.xs,
     color: colors.neutral.gray500,
-  },
-  timerValue: {
-    fontSize: typography.fontSize.xl,
-    fontWeight: typography.fontWeight.bold,
-    color: colors.primary.navy,
-    marginLeft: spacing.sm,
   },
   refreshButton: {
     marginTop: spacing.lg,

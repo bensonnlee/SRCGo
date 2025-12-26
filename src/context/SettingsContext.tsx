@@ -20,8 +20,8 @@ interface SettingsContextValue extends Settings {
 }
 
 const defaultSettings: Settings = {
-  keepScreenBright: true,
-  autoRefresh: true,
+  keepScreenBright: false,
+  autoRefresh: false,
 };
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
