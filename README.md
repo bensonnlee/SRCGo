@@ -1,45 +1,31 @@
 # SRCode
 
-A mobile app that generates time-sensitive Code128 barcodes for UCR authentication via Innosoft Fusion.
+A mobile app for UCR students and staff to quickly access their SRC barcode for building entry.
+
+## About
+
+SRCode generates time-sensitive barcodes for UCR Student Recreation Center authentication. Simply log in with your UCR credentials and your barcode will be ready to scan at the entrance.
 
 ## Features
 
-- UCR CAS authentication
-- Dynamic barcode generation with auto-refresh
-- Secure credential storage
-- Offline state handling
+- **Quick Access** - Your barcode is ready instantly after login
+- **Auto-Refresh** - Barcode automatically updates to stay valid
+- **Secure** - Your credentials are stored securely on your device
+- **Offline Support** - Works even with spotty connectivity
 
-## Tech Stack
+## How to Use
 
-- Expo SDK 54 / React Native 0.81
-- TypeScript
-- Expo Router (file-based navigation)
+1. Download SRCode from the App Store
+2. Log in with your UCR NetID and password
+3. Show your barcode at the SRC entrance
 
-## Getting Started
+## Privacy Policy
 
-1. Install dependencies
+SRCode respects your privacy:
 
-   ```bash
-   npm install
-   ```
+- **No data collection** - We do not collect, store, or transmit any personal information to external servers
+- **Local storage only** - Your login credentials are stored securely on your device using encrypted storage
+- **No analytics** - We do not track your usage or behavior
+- **No third-party sharing** - Your information is never shared with third parties
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-3. Open on your preferred platform:
-   - Press `i` for iOS simulator
-   - Press `a` for Android emulator
-   - Press `w` for web browser
-   - Scan QR code with Expo Go app on your device
-
-## Development
-
-```bash
-npm run ios        # Run on iOS simulator
-npm run android    # Run on Android emulator
-npm run web        # Run in web browser
-npm run lint       # Run ESLint
-```
+Your UCR credentials are only used to authenticate directly with UCR's servers to generate your barcode. The app acts as a secure bridge between you and UCR's authentication system.
