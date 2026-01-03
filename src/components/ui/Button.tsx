@@ -1,18 +1,18 @@
+import { colors } from '@theme/colors';
+import { borderRadius, spacing } from '@theme/spacing';
+import { typography } from '@theme/typography';
+import * as Haptics from 'expo-haptics';
 import React from 'react';
 import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  type TouchableOpacityProps,
-  type StyleProp,
-  type ViewStyle,
-  type TextStyle,
+    ActivityIndicator,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    type StyleProp,
+    type TextStyle,
+    type TouchableOpacityProps,
+    type ViewStyle,
 } from 'react-native';
-import * as Haptics from 'expo-haptics';
-import { colors } from '@theme/colors';
-import { typography } from '@theme/typography';
-import { spacing, borderRadius } from '@theme/spacing';
 
 export interface ButtonProps extends TouchableOpacityProps {
   title: string;
@@ -57,7 +57,7 @@ export function Button({
     >
       {isLoading ? (
         <ActivityIndicator
-          color={variant === 'outline' ? colors.primary.navy : colors.neutral.white}
+          color={variant === 'outline' ? colors.primary.blue : colors.neutral.white}
         />
       ) : (
         <Text
@@ -82,15 +82,15 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.md,
   },
   primary: {
-    backgroundColor: colors.primary.navy,
+    backgroundColor: colors.primary.blue,
   },
   secondary: {
-    backgroundColor: colors.primary.dandelion,
+    backgroundColor: colors.primary.gold,
   },
   outline: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: colors.primary.navy,
+    borderColor: colors.primary.blue,
   },
   size_sm: {
     paddingVertical: spacing.sm,
@@ -114,10 +114,10 @@ const styles = StyleSheet.create({
     color: colors.neutral.white,
   },
   text_secondary: {
-    color: colors.primary.navy,
+    color: colors.primary.blue,
   },
   text_outline: {
-    color: colors.primary.navy,
+    color: colors.primary.blue,
   },
   text_sm: {
     fontSize: typography.fontSize.sm,

@@ -79,8 +79,8 @@ The project uses `@/*` path alias mapping to the root directory (configured in `
 ## Design System
 
 Brand colors defined in implementation plan:
-- Navy: `#003366`
-- Dandelion: `#FFD700`
+- Blue: `#003DA5`
+- Gold: `#FFD700`
 - Light Blue: `#87CEEB`
 - Rose: `#FF007F`
 

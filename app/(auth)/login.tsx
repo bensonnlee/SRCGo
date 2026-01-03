@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
-import * as Haptics from 'expo-haptics';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSequence,
-  withTiming,
-} from 'react-native-reanimated';
 import { Button } from '@components/ui/Button';
-import { Input } from '@components/ui/Input';
 import { Card } from '@components/ui/Card';
+import { Input } from '@components/ui/Input';
 import { Switch } from '@components/ui/Switch';
 import { useAuth } from '@hooks/useAuth';
 import { colors } from '@theme/colors';
-import { typography } from '@theme/typography';
 import { spacing } from '@theme/spacing';
+import { typography } from '@theme/typography';
+import * as Haptics from 'expo-haptics';
+import { router } from 'expo-router';
+import React, { useState } from 'react';
+import {
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+    withSequence,
+    withTiming,
+} from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
   const auth = useAuth();
@@ -135,7 +135,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primary.navy,
+    backgroundColor: colors.primary.blue,
   },
   keyboardView: {
     flex: 1,
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: typography.fontSize['4xl'],
     fontWeight: typography.fontWeight.bold,
-    color: colors.primary.dandelion,
+    color: colors.primary.gold,
   },
   subtitle: {
     fontSize: typography.fontSize.lg,

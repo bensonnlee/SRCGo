@@ -1,7 +1,7 @@
 export const colors = {
   primary: {
-    navy: '#003366',
-    dandelion: '#FFD700',
+    blue: '#003DA5',
+    gold: '#FFB81C',
     lightBlue: '#87CEEB',
     rose: '#FF007F',
   },

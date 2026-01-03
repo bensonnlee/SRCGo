@@ -1,14 +1,14 @@
-import { Stack, router } from 'expo-router';
-import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@theme/colors';
+import { Stack, router } from 'expo-router';
+import { TouchableOpacity } from 'react-native';
 
 export default function MainLayout() {
   return (
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: colors.primary.navy,
+          backgroundColor: colors.primary.blue,
         },
         headerTintColor: colors.neutral.white,
         headerTitleStyle: {

@@ -1,16 +1,16 @@
+import { colors } from '@theme/colors';
+import { borderRadius, spacing } from '@theme/spacing';
+import { typography } from '@theme/typography';
 import React, { useState } from 'react';
 import {
-  TextInput,
-  View,
-  Text,
-  StyleSheet,
-  type TextInputProps,
-  type StyleProp,
-  type ViewStyle,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+    type StyleProp,
+    type TextInputProps,
+    type ViewStyle,
 } from 'react-native';
-import { colors } from '@theme/colors';
-import { typography } from '@theme/typography';
-import { spacing, borderRadius } from '@theme/spacing';
 
 export interface InputProps extends TextInputProps {
   label?: string;
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral.white,
   },
   inputFocused: {
-    borderColor: colors.primary.navy,
+    borderColor: colors.primary.blue,
     borderWidth: 2,
   },
   inputError: {
