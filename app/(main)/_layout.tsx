@@ -19,7 +19,7 @@ export default function MainLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: 'SRCode',
+          title: 'SRCGo',
           // @ts-expect-error - headerRightContainerStyle exists in React Navigation but missing from Expo Router types
           headerRightContainerStyle: {
             justifyContent: 'center',

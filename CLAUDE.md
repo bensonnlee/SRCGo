@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-SRCode is an Expo/React Native mobile app that generates time-sensitive Code128 barcodes for UCR authentication via Innosoft Fusion. The app implements a multi-step OAuth-like authentication flow with UCR CAS.
+SRCGo is an Expo/React Native mobile app that generates time-sensitive Code128 barcodes for UCR authentication via Innosoft Fusion. The app implements a multi-step OAuth-like authentication flow with UCR CAS.
 
 ## Commands
 

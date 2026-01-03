@@ -1,10 +1,10 @@
-# SRCode
+# SRCGo
 
 A mobile app for UCR students and staff to quickly access their SRC barcode for building entry.
 
 ## About
 
-SRCode generates time-sensitive barcodes for UCR Student Recreation Center authentication. Simply log in with your UCR credentials and your barcode will be ready to scan at the entrance.
+SRCGo generates time-sensitive barcodes for UCR Student Recreation Center authentication. Simply log in with your UCR credentials and your barcode will be ready to scan at the entrance.
 
 ## Features
 
@@ -14,13 +14,13 @@ SRCode generates time-sensitive barcodes for UCR Student Recreation Center authe
 
 ## How to Use
 
-1. Download SRCode from the App Store
+1. Download SRCGo from the App Store
 2. Log in with your UCR NetID and password
 3. Show your barcode at the SRC entrance
 
 ## Privacy Policy
 
-SRCode respects your privacy:
+SRCGo respects your privacy:
 
 - **No data collection** - We do not collect, store, or transmit any personal information to external servers
 - **Local storage only** - Your login credentials are stored securely on your device using encrypted storage

@@ -74,7 +74,7 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.header}>
-            <Text style={styles.title}>SRCode</Text>
+            <Text style={styles.title}>SRCGo</Text>
             <Text style={styles.subtitle}>UCR Authentication</Text>
           </View>
 
