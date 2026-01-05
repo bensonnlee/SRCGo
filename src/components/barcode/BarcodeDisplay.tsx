@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Barcode from 'react-native-barcode-svg';
 import { Skeleton } from '@components/ui/Skeleton';
 import { colors } from '@theme/colors';
@@ -7,11 +7,18 @@ import { typography } from '@theme/typography';
 import { spacing } from '@theme/spacing';
 import type { BarcodeDisplayProps } from '@apptypes/barcode';
 
+interface ExtendedBarcodeDisplayProps extends BarcodeDisplayProps {
+  onPress?: () => void;
+  isBrightnessActive?: boolean;
+}
+
 export function BarcodeDisplay({
   value,
   height = 220,
   isLoading = false,
-}: BarcodeDisplayProps) {
+  onPress,
+  isBrightnessActive = false,
+}: ExtendedBarcodeDisplayProps) {
   // Show skeleton when loading
   if (isLoading) {
     return (
@@ -39,12 +46,13 @@ export function BarcodeDisplay({
     );
   }
 
-  return (
+  const content = (
     <View
-      style={styles.container}
+      style={[styles.container, isBrightnessActive && styles.containerActive]}
       accessible={true}
-      accessibilityRole="image"
-      accessibilityLabel={`Barcode: ${value}`}
+      accessibilityRole={onPress ? 'button' : 'image'}
+      accessibilityLabel={`Barcode: ${value}${onPress ? '. Tap to toggle screen brightness' : ''}`}
+      accessibilityHint={onPress ? (isBrightnessActive ? 'Brightness is maximized. Tap to restore.' : 'Tap to maximize screen brightness') : undefined}
     >
       <View style={styles.barcodeWrapper}>
         <Barcode
@@ -58,6 +66,16 @@ export function BarcodeDisplay({
       </View>
     </View>
   );
+
+  if (onPress) {
+    return (
+      <Pressable onPress={onPress}>
+        {content}
+      </Pressable>
+    );
+  }
+
+  return content;
 }
 
 const styles = StyleSheet.create({
@@ -66,6 +84,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral.white,
     padding: spacing.md,
     borderRadius: 8,
+  },
+  containerActive: {
+    borderWidth: 2,
+    borderColor: colors.primary.gold,
   },
   barcodeWrapper: {
     backgroundColor: colors.neutral.white,

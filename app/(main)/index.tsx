@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import * as Brightness from 'expo-brightness';
+import { Ionicons } from '@expo/vector-icons';
 import { BarcodeDisplay } from '@components/barcode/BarcodeDisplay';
 import { Button } from '@components/ui/Button';
 import { Card } from '@components/ui/Card';
@@ -12,11 +13,15 @@ import { useSettings } from '@context/SettingsContext';
 import { colors } from '@theme/colors';
 import { typography } from '@theme/typography';
 import { spacing } from '@theme/spacing';
+import { borderRadius } from '@theme/spacing';
 
 export default function BarcodeScreen() {
   const auth = useAuth();
   const settings = useSettings();
   const originalBrightnessRef = useRef<number | null>(null);
+  const [isBrightnessMaxed, setIsBrightnessMaxed] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipOpacity = useRef(new Animated.Value(0)).current;
 
   const { barcodeId, isLoading, error, timeUntilRefresh, refresh } = useBarcode(
     auth.fusionToken,
@@ -25,7 +30,7 @@ export default function BarcodeScreen() {
     auth.isDemoMode
   );
 
-  // Handle screen brightness
+  // Handle screen brightness from settings (keep screen bright toggle)
   useEffect(() => {
     let isMounted = true;
 
@@ -60,6 +65,65 @@ export default function BarcodeScreen() {
     };
   }, [settings.keepScreenBright]);
 
+  // Handle barcode press brightness toggle
+  const handleBarcodePress = useCallback(async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    try {
+      const isAvailable = await Brightness.isAvailableAsync?.() ?? true;
+      if (!isAvailable) return;
+
+      if (!isBrightnessMaxed) {
+        // Save current brightness and set to max
+        if (originalBrightnessRef.current === null) {
+          originalBrightnessRef.current = await Brightness.getBrightnessAsync();
+        }
+        await Brightness.setBrightnessAsync(1);
+        setIsBrightnessMaxed(true);
+      } else {
+        // Restore original brightness
+        if (originalBrightnessRef.current !== null) {
+          await Brightness.setBrightnessAsync(originalBrightnessRef.current);
+          originalBrightnessRef.current = null;
+        }
+        setIsBrightnessMaxed(false);
+      }
+    } catch {
+      // Brightness API not available or permission denied
+    }
+  }, [isBrightnessMaxed]);
+
+  // Handle info button press - show/hide tooltip
+  const handleInfoPress = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    if (showTooltip) {
+      // Hide tooltip
+      Animated.timing(tooltipOpacity, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start(() => setShowTooltip(false));
+    } else {
+      // Show tooltip
+      setShowTooltip(true);
+      Animated.timing(tooltipOpacity, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+
+      // Auto-hide after 3 seconds
+      setTimeout(() => {
+        Animated.timing(tooltipOpacity, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        }).start(() => setShowTooltip(false));
+      }, 3000);
+    }
+  }, [showTooltip, tooltipOpacity]);
+
   const handleRefresh = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
@@ -79,12 +143,41 @@ export default function BarcodeScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <View style={styles.content}>
-        <Card style={styles.barcodeCard}>
-          <BarcodeDisplay
-            value={barcodeId ?? ''}
-            isLoading={isLoading && !barcodeId}
-          />
-        </Card>
+        <View style={styles.barcodeCardWrapper}>
+          <Card style={styles.barcodeCard}>
+            <BarcodeDisplay
+              value={barcodeId ?? ''}
+              isLoading={isLoading && !barcodeId}
+              onPress={handleBarcodePress}
+              isBrightnessActive={isBrightnessMaxed}
+            />
+          </Card>
+
+          {/* Info Button */}
+          <Pressable
+            style={styles.infoButton}
+            onPress={handleInfoPress}
+            accessibilityLabel="Info"
+            accessibilityHint="Tap to see how to use brightness toggle"
+            accessibilityRole="button"
+          >
+            <Ionicons
+              name="information-circle-outline"
+              size={24}
+              color={colors.primary.blue}
+            />
+          </Pressable>
+
+          {/* Tooltip */}
+          {showTooltip && (
+            <Animated.View style={[styles.tooltip, { opacity: tooltipOpacity }]}>
+              <Text style={styles.tooltipText}>
+                Tap the barcode to toggle maximum brightness
+              </Text>
+              <View style={styles.tooltipArrow} />
+            </Animated.View>
+          )}
+        </View>
 
         {settings.autoRefresh && (
           <View
@@ -129,9 +222,48 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     justifyContent: 'center',
   },
+  barcodeCardWrapper: {
+    position: 'relative',
+  },
   barcodeCard: {
     alignItems: 'center',
     padding: spacing.xl,
+  },
+  infoButton: {
+    position: 'absolute',
+    top: spacing.sm,
+    right: spacing.sm,
+    padding: spacing.xs,
+    zIndex: 10,
+  },
+  tooltip: {
+    position: 'absolute',
+    top: spacing.sm + 32,
+    right: spacing.sm,
+    backgroundColor: colors.neutral.gray800,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    borderRadius: borderRadius.md,
+    maxWidth: 220,
+    zIndex: 20,
+  },
+  tooltipText: {
+    color: colors.neutral.white,
+    fontSize: typography.fontSize.sm,
+    textAlign: 'center',
+  },
+  tooltipArrow: {
+    position: 'absolute',
+    top: -6,
+    right: 10,
+    width: 0,
+    height: 0,
+    borderLeftWidth: 6,
+    borderRightWidth: 6,
+    borderBottomWidth: 6,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: colors.neutral.gray800,
   },
   timerContainer: {
     alignItems: 'center',
