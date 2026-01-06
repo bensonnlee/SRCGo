@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Barcode from 'react-native-barcode-svg';
 import { Skeleton } from '@components/ui/Skeleton';
 import { colors } from '@theme/colors';
@@ -11,6 +11,8 @@ export function BarcodeDisplay({
   value,
   height = 220,
   isLoading = false,
+  onPress,
+  isBrightnessActive = false,
 }: BarcodeDisplayProps) {
   // Show skeleton when loading
   if (isLoading) {
@@ -39,12 +41,13 @@ export function BarcodeDisplay({
     );
   }
 
-  return (
+  const content = (
     <View
       style={styles.container}
       accessible={true}
-      accessibilityRole="image"
-      accessibilityLabel={`Barcode: ${value}`}
+      accessibilityRole={onPress ? 'button' : 'image'}
+      accessibilityLabel={`Barcode: ${value}${onPress ? '. Tap to toggle screen brightness' : ''}`}
+      accessibilityHint={onPress ? (isBrightnessActive ? 'Brightness is maximized. Tap to restore.' : 'Tap to maximize screen brightness') : undefined}
     >
       <View style={styles.barcodeWrapper}>
         <Barcode
@@ -58,6 +61,16 @@ export function BarcodeDisplay({
       </View>
     </View>
   );
+
+  if (onPress) {
+    return (
+      <Pressable onPress={onPress}>
+        {content}
+      </Pressable>
+    );
+  }
+
+  return content;
 }
 
 const styles = StyleSheet.create({

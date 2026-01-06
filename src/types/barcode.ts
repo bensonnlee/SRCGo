@@ -15,4 +15,6 @@ export interface BarcodeDisplayProps {
   value: string;
   height?: number;
   isLoading?: boolean;
+  onPress?: () => void;
+  isBrightnessActive?: boolean;
 }
