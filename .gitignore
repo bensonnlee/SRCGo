@@ -42,3 +42,6 @@ docs/
 # generated native folders
 /ios
 /android
+
+# build instructions
+build_and_deploy_apple.md
