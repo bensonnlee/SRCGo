@@ -1,5 +1,5 @@
 import React, { createContext, useState, useCallback, useEffect } from 'react';
-import type { AuthState, AuthContextValue } from '@apptypes/auth';
+import type { AuthState, AuthContextValue, LoginResult } from '@apptypes/auth';
 import {
   getCredentials,
   getFusionToken,
@@ -83,9 +83,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       username: string,
       password: string,
       rememberMe: boolean
-    ): Promise<boolean> => {
+    ): Promise<LoginResult> => {
       // Check for demo mode trigger
-      if (username.toLowerCase() === DEMO_MODE.TRIGGER_USERNAME) {
+      if (username.toLowerCase().trim() === DEMO_MODE.TRIGGER_USERNAME) {
         setState({
           isAuthenticated: true,
           isLoading: false,
@@ -93,7 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           user: { username: DEMO_MODE.DISPLAY_NAME },
           fusionToken: DEMO_MODE.FUSION_TOKEN,
         });
-        return true;
+        return { success: true };
       }
 
       setState((prev) => ({ ...prev, isLoading: true }));
@@ -107,25 +107,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
           // Save credentials only if "Remember me" is checked
           if (rememberMe) {
-            await saveCredentials(username, password);
+            await saveCredentials(username.trim(), password.trim());
           }
 
           setState({
             isAuthenticated: true,
             isLoading: false,
             isDemoMode: false,
-            user: { username },
+            user: { username: username.trim() },
             fusionToken: result.fusionToken,
           });
 
-          return true;
+          return { success: true };
         }
 
         setState((prev) => ({ ...prev, isLoading: false }));
-        return false;
-      } catch {
+        return { success: false, error: result.error || 'Authentication failed' };
+      } catch (error) {
         setState((prev) => ({ ...prev, isLoading: false }));
-        return false;
+        const message = error instanceof Error ? error.message : 'Authentication failed';
+        return { success: false, error: message };
       }
     },
     []

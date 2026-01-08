@@ -65,15 +65,15 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     setError(null);
 
-    const success = await auth.login(username, password, rememberMe);
+    const result = await auth.login(username, password, rememberMe);
 
-    if (success) {
+    if (result.success) {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       router.replace('/(main)');
     } else {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       triggerShake();
-      setError('Invalid username or password');
+      setError(result.error || 'Invalid username or password');
     }
   };
 

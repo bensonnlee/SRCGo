@@ -17,12 +17,17 @@ export interface AuthState {
   fusionToken: string | null;
 }
 
+export interface LoginResult {
+  success: boolean;
+  error?: string;
+}
+
 export interface AuthContextValue extends AuthState {
   login: (
     username: string,
     password: string,
     rememberMe: boolean
-  ) => Promise<boolean>;
+  ) => Promise<LoginResult>;
   logout: () => Promise<void>;
   refreshToken: () => Promise<boolean>;
 }

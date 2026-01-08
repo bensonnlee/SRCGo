@@ -188,6 +188,17 @@ export async function authenticateUser(
   username: string,
   password: string
 ): Promise<AuthResult> {
+  // Trim whitespace from credentials - mobile users often accidentally add spaces
+  const trimmedUsername = username.trim();
+  const trimmedPassword = password.trim();
+
+  if (!trimmedUsername || !trimmedPassword) {
+    return {
+      success: false,
+      error: 'Username and password are required',
+    };
+  }
+
   try {
     // Step 1: Initialize session
     await startLogin();
@@ -196,7 +207,7 @@ export async function authenticateUser(
     const execution = await getExecution();
 
     // Step 3: Submit credentials and get ticket URL
-    const ticketUrl = await submitLogin(execution, username, password);
+    const ticketUrl = await submitLogin(execution, trimmedUsername, trimmedPassword);
 
     // Step 4: Complete login and get fusion token
     const fusionToken = await loginFinish(ticketUrl);
